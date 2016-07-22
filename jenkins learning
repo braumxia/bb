@@ -1,0 +1,70 @@
+                             
+                                      install jenkins
+This is the Debian package repository of Jenkins to automate installation and upgrade. To use this repository, first add the key to your system:
+
+wget -q -O - http://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
+==========================================================================================
+Then add the following entry in your /etc/apt/sources.list:
+
+deb http://pkg.jenkins.io/debian-stable binary/
+===============================================================================================
+Update your local package index, then finally install Jenkins:
+
+sudo apt-get update
+sudo apt-get install jenkins
+
+
+                                        configuration procesure
+firstly, browse the URL: localhost:8080 (you can see the photo: file:///home/matchbox-server/Pictures/jenkins-password.png)
+================================
+the password is stored in the file (/var/lib/jenkins/secrets/initialAdminPassword) 
+=================================
+after you input the password, you can install suggested plugins
+=================================
+Then you can create First Admin User, in this server, the jebkins's username is "MatchBox", Password is "abc123_", Full name is "MatchBox-Server", E-mail address is "phoenix.grey0108@gmail.com". The detail information you can see the file(/home/matchbox-server/Pictures/create admin user.png) 
+
+
+
+
+                                          create&configure SSH 
+Generate SSH keys
+Open the console,change the user to jenkins(sudo su jenkins),then generate the SSH key(ssh-keygen),input the path of the generated ssh keys(the path will show in the console).After that ,cilck Enter three times,finish generating the SSH keys.You can see the pictures (/home/matchbox-server/Pictures/sshkeygen.png) to help you.
+=======================
+Configure SSH 
+Click Credentials, you can create a credential. Choose the Domain (global),click and then you can add credentials. Once you click "Add Credentials",you should choose the kind of the credential,we choose the type "SSH Username with private key". Input a Username and choose the way to find the private key,we choose "Enter directly" here, input the private key which generated in "Generete SSH keys", the private key was in the file "id_rsa"(/var/lib/jenkins/.ssh.id_rsa).
+
+Attention: the public key is in the github configuration. setting -> SSH and GPG keys ->New SSK key.Input the public key generated in "Generate SSH keys",the public key was in the file "id_rsa.pub"(/var/lib/jenkins/.ssh.id_rsa.pub).
+
+========================================================
+                                         create&configure a new job
+Click "New item" to create a new job. Enter an item name(example: newjob), and choose the type of the new job(we choose "freestyle project" here), click OK.
+
+newjob->Configure->Source Code Management
+Choose Git,input Repository URL, and choose a credential which you have created in "Configure SSH ". Branch Specifier (blank for 'any') must be same in your github respository.
+
+Select Build when a change is pushed to GitHub and Poll SCM, input "H/2 * * * *" in "Schedule", it means once the github respository updated, it will check and update in 2 mins. 
+
+If you want to build the project, you can choose the type "Execute shell" in Build. 
+For example we input shell command like "make" to build the project .
+
+
+newjob->Build Now 
+To see the result of your build.From the "Build History",you will see your build records.The files in the github respository can be find in "Workspace".
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
